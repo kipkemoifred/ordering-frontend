@@ -17,7 +17,7 @@ const OrderHistory = () => {
         <div>
             <h2>Your Orders</h2>
             <div>
-                {orders.length === 0 ? (
+                {!Array.isArray(orders) || orders.length === 0 ? (
                     <p>No orders found.</p>
                 ) : (
                     orders.map((order) => (
@@ -30,6 +30,7 @@ const OrderHistory = () => {
             </div>
         </div>
     );
+    
 };
 
 export default OrderHistory;

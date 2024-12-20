@@ -18,20 +18,27 @@ function App() {
         alert('Order placed');
         setCartItems([]); // Clear the cart after placing the order
     };
+    const handleAddToCart = (product) => {
+      setCartItems((prevItems) => {
+          const existingItem = prevItems.find((item) => item.id === product.id);
+          if (existingItem) {
+              return prevItems.map((item) =>
+                  item.id === product.id
+                      ? { ...item, quantity: item.quantity + 1 }
+                      : item
+              );
+          }
+          return [...prevItems, { ...product, quantity: 1 }];
+      });
+  };
 
     return (
         <Router>
             <Navbar />
             <Routes>
-                <Route path="/" exact>
-                    <Home />
-                </Route>
-                <Route path="/cart">
-                    <CartPage cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} onPlaceOrder={handlePlaceOrder} />
-                </Route>
-                <Route path="/orders">
-                    <OrderPage />
-                </Route>
+            <Route path="/" element={<Home cartItems={cartItems} onAddToCart={handleAddToCart} />} />
+                <Route path="/cart" element={<CartPage cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} onPlaceOrder={handlePlaceOrder} />} />
+                <Route path="/orders" element={<OrderPage />} />
             </Routes>
         </Router>
     );
