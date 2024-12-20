@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import CartPage from './pages/CartPage';
+import OrderPage from './pages/OrderPage';
+import Navbar from './components/Navbar';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [cartItems, setCartItems] = useState([]);
+
+    const handleRemoveFromCart = (id) => {
+        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    };
+
+    const handlePlaceOrder = async () => {
+        // Call the API to place the order
+        // await placeOrder({ items: cartItems });
+        alert('Order placed');
+        setCartItems([]); // Clear the cart after placing the order
+    };
+
+    return (
+        <Router>
+            <Navbar />
+            <Routes>
+                <Route path="/" exact>
+                    <Home />
+                </Route>
+                <Route path="/cart">
+                    <CartPage cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} onPlaceOrder={handlePlaceOrder} />
+                </Route>
+                <Route path="/orders">
+                    <OrderPage />
+                </Route>
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
